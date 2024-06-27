@@ -38,9 +38,9 @@ http.createServer((req, res) => {
     //    })
 
 
-        res.writeHead(200, { 'Content-Type': 'application/json' })
-        res.write('details page')
-        res.end()
+        // res.writeHead(200, { 'Content-Type': 'application/json' })
+        // res.write('details page')
+        // res.end()
 
         // Reading or creating  the file 
 
@@ -53,10 +53,10 @@ http.createServer((req, res) => {
         // })
 
 
-        // fs.appendFile('./index.html',"<h1>append the data </h1>",(err,data)=>{
-        //      res.write("udpated")
-        //      res.end()
-        // })
+        fs.writeFile('./index.html',"<h1>append the data </h1>",(err,data)=>{
+            res.write("file created")
+            res.end()
+        })
 
         // fs.writeFile('./one.txt', "sainath", (err, data) => {
         //     res.write("one page created")
