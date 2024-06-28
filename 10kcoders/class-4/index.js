@@ -23,19 +23,19 @@ http.createServer((req, res) => {
     //    task
 
     //    console.log(result.search)
-    // let obj={}
-    //    var data = result.search.slice(1).split('&')
-    //    data.forEach((ele,index)=>{
-    //         var one=ele.replaceAll('=',":").split(":")
-    //         var [key,value]=one
-    //         obj[key]=value
+    let obj={}
+       var data = result.search.slice(1).split('&')
+       data.forEach((ele,index)=>{
+            var one=ele.replaceAll('=',":").split(":")
+            var [key,value]=one
+            obj[key]=value
 
-    //    })
-    //    console.log(obj)
+       })
+       console.log(obj)
 
-    //    fs.writeFile('./index.txt',JSON.stringify(obj),(err,data)=>{
-    //     console.log("file created")
-    //    })
+       fs.writeFile('./index.txt',JSON.stringify(obj),(err,data)=>{
+        console.log("file created")
+       })
 
 
         // res.writeHead(200, { 'Content-Type': 'application/json' })
