@@ -1,0 +1,1 @@
+A Domain Name System (DNS) server is a machine that translates domain names into IP addresses, allowing web browsers to access websites and other internet resources. When a user types a domain name into their browser, the DNS server finds the correct IP address for that site and tells the browser which server to use to reach it. This process is called DNS
