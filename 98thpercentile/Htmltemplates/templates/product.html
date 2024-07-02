@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* border: 1px solid red; */
+            height: 100vh;
+            width: 100vw;
+        }
+        .data{
+            width: 50%;
+            height: 50%;
+            /* border: 2px solid; */
+            display: flex;
+            box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+            flex-flow: column wrap;
+        }
+        .img-resize{
+            width: 300px;
+            height: 320px;
+        }
+        .col-2{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            /* border: 2px solid red; */
+            width: 50%;
+            height: 100%;
+        }
+        .col-2>p{
+            font-size:105%;
+        }
+        .navigate{
+            text-decoration: none;
+            font-size:120%;
+            border: 2px solid;
+            padding: 5px;
+            background-color: black;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="data">
+            <div class="col-1">
+
+                <img src="{%IMAGE%}" class="img-resize" alt="">
+                <h3 style="text-align: center;"> {%CATEGORY%}</h3>
+            </div>
+            <div class="col-2">
+
+                <P>title : {%TITLE%}</P>
+                <P>description : {%DESCRIPTION%}</P>
+                <P class="{%TYPE%}">Type : imported</P>
+                <P>price : {%PRICE%}</P>
+                <a href="/" class="navigate">Back</a>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
