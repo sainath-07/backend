@@ -3,10 +3,10 @@ const server = require('http').createServer()
 
 
 
-server.on('request',(req,res)=>{
+server.on('request', (req, res) => {
 
     // 1. Solution
-    
+
     // fs.readFile('./test.txt',(err,data)=>{
     //     res.write(data)
     //     res.end()
@@ -14,14 +14,13 @@ server.on('request',(req,res)=>{
 
 
     // 2. Solution  by using the streams we can improves the performance and minimizes memory usage
-    const readable=fs.createReadStream('test.txt')
-    const result=readable.pipe(res)
-  
+    const readable = fs.createReadStream('test.txt')
+    readable.pipe(res)
 
 })
 
 
-server.listen(5000,()=>{
+server.listen(5000, () => {
     console.log('server is running')
 })
 

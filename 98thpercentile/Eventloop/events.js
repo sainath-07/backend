@@ -37,9 +37,9 @@ server.on('request',(req,res)=>{
     console.log(req.url)
     res.write('received the request')
     res.end()
-   
-    
+
 })
+
 server.on('request',(req,res)=>{
     console.log('received the two request')
     
