@@ -57,10 +57,6 @@ app.get('/search/:key',async(req,res)=>{
         res.send(data)
          console.log(data)
     }
-        
-        
-
-  
 
 })
 
