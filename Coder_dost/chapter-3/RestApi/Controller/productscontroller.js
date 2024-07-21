@@ -1,45 +1,92 @@
-const fs=require('fs')
-const data= JSON.parse( fs.readFileSync('./data.json'))
+const Products = require('../models/scheme')
 
 
-exports.getallproducts=(req,res)=>{
-    res.send({
-       result: data.products
-    })
+exports.getallproductsSSR = async (req, res) => {
+    const productsdata = await Products.find()
+    res.render('index.ejs', { productsdata: productsdata })
 }
-exports.geteachproduct=(req,res)=>{
-    const id= +req.params.id
-    const findbyid=data.products.find(ele=>ele.id===id)
-    res.json({
-        result : findbyid
-    })
-}
-exports.posteachproduct= (req,res)=>{
-    console.log(req.body)
 
-    data.products.push(req.body)
+//routes
+exports.posteachproduct = async (req, res) => {
+    try {
+        const products = new Products(req.body)
+        const productsdata = await products.save()
+        res.status(200).json(productsdata)
+    }
+    catch (err) {
+        res.status(400).json({
+            error_message: err
+        })
+    }
+}
+exports.getallproducts = async (req, res) => {
+    let productsdata = Products.find()
 
-    res.json({
-        data: req.body
-    })
+    // Sorting Logic in REST api's
+    if (req.query.sort) {
+        const sortBy=req.query.sort.split(',').join(' ')
+        console.log(sortBy)
+        productsdata = productsdata.sort(sortBy)
+
+        // http://localhost:5000/products?sort=price 
+        // http://localhost:5000/products?sort=-price  for: Descending order place - before the fieldname
+    }
+    else{
+        // default Sorting Logic
+     productsdata = productsdata.find().sort('-discountPercentage')
+
+    }
+    const productdata = await productsdata;
+    res.json({ productdata })
+
+
 }
-exports.puteachproduct=(req,res)=>{
-    const id= +req.params.id
-    const findbyid = data.products.findIndex(ele=>ele.id===id)
-    data.products.splice(findbyid,1,{...req.body,id:id}) //it will add the id to req.body
-    res.send("updated")
+
+exports.geteachproduct = async (req, res) => {
+    const id = req.params.id
+    const productsdata = await Products.findById(id)
+    res.json({ productsdata })
 }
-exports.patcheachproduct=(req,res)=>{
-    const id= +req.params.id
-    const findbyid= data.products.findIndex(ele=>ele.id===id)
-    const product= data.products[findbyid]
-    data.products.splice(findbyid,1,{...product,...req.body}) //here req.body will search and replace the same property.
-    res.send('patch is successfull')
+exports.puteachproduct = async (req, res) => {
+    const id = req.params.id
+    try {
+        const productdata = await Products.findOneAndReplace({ _id: id }, req.body, { new: true }) //new:true will return the updated data.
+        res.json(productdata)
+    }
+    catch (err) {
+        res.send(400).json({
+            error_message: err
+        })
+    }
+
 }
-exports.deleteeachproduct=(req,res)=>{
-    const id= +req.params.id
-    const findbyid= data.products.findIndex(ele=>ele.id===id)
-    data.products.splice(findbyid,1)
-    res.send('deleted')
+exports.patcheachproduct = async (req, res) => {
+    const id = req.params.id
+    try {
+        const productdata = await Products.findOneAndUpdate({ _id: id }, req.body, { new: true })
+        res.json({
+            data: productdata
+        })
+    }
+    catch (err) {
+        res.send(400).json({
+            error_message: err
+        })
+    }
+}
+exports.deleteeachproduct = async (req, res) => {
+    const id = req.params.id
+    try {
+
+        const productdata = await Products.findByIdAndDelete({ _id: id })
+        res.json({
+            productdata
+        })
+    }
+    catch (err) {
+        res.json({
+            error_message: err,
+        })
+    }
 
 }
