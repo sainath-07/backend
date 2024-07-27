@@ -20,25 +20,67 @@ exports.posteachproduct = async (req, res) => {
     }
 }
 exports.getallproducts = async (req, res) => {
-    let productsdata = Products.find()
 
-    // Sorting Logic in REST api's
-    if (req.query.sort) {
-        const sortBy=req.query.sort.split(',').join(' ')
-        console.log(sortBy)
-        productsdata = productsdata.sort(sortBy)
 
-        // http://localhost:5000/products?sort=price 
-        // http://localhost:5000/products?sort=-price  for: Descending order place - before the fieldname
+    try {
+        let productsdata = Products.find()
+        // Sorting Logic in REST api's
+        if (req.query.sort) {
+            const sortBy = req.query.sort.split(',').join(' ')
+            console.log(sortBy)
+            productsdata = productsdata.sort(sortBy)
+
+            // http://localhost:5000/products?sort=price 
+            // http://localhost:5000/products?sort=-price  for: Descending order place -(hypen) before the fieldname
+        }
+        else if (req.query.fields) {
+
+            // Limiting fields logic
+            let limitfields = req.query.fields.split(',').join(' ')
+
+            //   execlude the _id field 
+            limitfields += ' -_id';
+            console.log(limitfields)
+            productsdata = productsdata.select(limitfields)
+
+
+            //  http://localhost:5000/products?fields=name,price,brand,title
+            //  http://localhost:5000/products?fields=-brand,-price for: exculding the fields run this api
+            // we can't perfrom the exclusion,inclusion in one api 
+
+        }
+        else {
+            // default Sorting Logic
+            productsdata = productsdata.find().sort('-discountPercentage')
+        }
+
+        // Pagination Logic
+
+
+        if (req.query.page) {
+            let page = req.query.page * 1 || 1;
+            let limit = req.query.limit * 1 || 10;
+            let skip = (page - 1) * limit
+            const productsCount = await Products.countDocuments();
+
+            if (skip > productsCount) {
+                throw new Error('This page is not found and no products to show')
+            }
+            productsdata = productsdata.skip(skip).limit(limit)
+        }
+
+        const productdata = await productsdata;
+        res.json({
+            length: productdata.length,
+            productdata
+        })
     }
-    else{
-        // default Sorting Logic
-     productsdata = productsdata.find().sort('-discountPercentage')
-
+    catch (err) {
+        res.status(404).json({
+            status: 'fail',
+            error_message: err.message
+        })
     }
-    const productdata = await productsdata;
-    res.json({ productdata })
-
 
 }
 
